@@ -21,15 +21,15 @@ Element.prototype.insertChildAtIndex = function (child, index) {
 }
 
 
-setInterval(() => {
 
+setInterval(() => {
     
     getAllElementsWithAttribute('crazy-').forEach((elem, i) => {
         let allAttrs = elem.getAttributeNames();
         allAttrs.forEach(attr => {
-
+            
             // Untested two way binding
-            if (attr.startsWith('[') && attr.endsWith('[')) {
+            if (attr.startsWith('[') && attr.endsWith(']')) {
 
                 elem.removeAttribute('crazy-');
                 elem.setAttribute('crazy-' + i);
@@ -52,12 +52,13 @@ setInterval(() => {
                 }
 
                 // html->js one way binding
-                if (attr.endsWith(']')) {
+                if (attr.endsWith(')')) {
                     let crazyAttrValue = this;
                     let objectScope = elem.getAttribute(attr).split('.');
                     for (let objIndex = 0; objIndex < objectScope.length; objIndex++) {
                         if (objIndex === objectScope.length - 1) {
                             crazyAttrValue[objectScope[objIndex]] = elem[attr.slice(0, attr.length - 1)];
+                            // setValue(crazyAttrValue[objectScope[objIndex]], elem[attr.slice(0, attr.length - 1)])
                         } else {
                             crazyAttrValue = crazyAttrValue[objectScope[objIndex]];
                         }
