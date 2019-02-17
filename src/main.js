@@ -22,12 +22,12 @@ Element.prototype.insertChildAtIndex = function (child, index) {
 
 
 
-setInterval(() => {
-    
+// setInterval(() => {
+traverse = () => {
     getAllElementsWithAttribute('crazy-').forEach((elem, i) => {
         let allAttrs = elem.getAttributeNames();
         allAttrs.forEach(attr => {
-            
+
             // Untested two way binding
             if (attr.startsWith('[') && attr.endsWith(']')) {
 
@@ -70,5 +70,5 @@ setInterval(() => {
 
         })
     })
-
-}, 0)
+}
+// }, 0)

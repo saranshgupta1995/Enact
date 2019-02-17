@@ -5,6 +5,10 @@ function raichu() {
         console.log('da')
     }
 
-    return "ola" + pikachu
+    return pikachu && "Hi " + pikachu;
 
+}
+
+setPika=function(e){
+    setValue('pikachu',e.target.value)
 }

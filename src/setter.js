@@ -25,4 +25,6 @@ function setValue(attr, val){
         }
     }
 
+    traverse();
+
 }
