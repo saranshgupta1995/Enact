@@ -10,8 +10,12 @@
     <script src="./../test/test.js"></script>
 </head>
 <body>
-    <input crazy- type="text" [value="pikachu">
+    <!-- pikachu means which global variable to bind -->
+    <input crazy- type="text" [value="pikachu"> 
     <input crazy- type="text" oninput="setPika(event)">
     <div crazy- en-renderer="raichu" en-render-on="pikachu"></div>
+    <div crazy- for="i of arr">
+        HEY <span> hello! </span>{i}
+    </div>
 </body>
 </html>

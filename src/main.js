@@ -40,15 +40,23 @@ traverse = () => {
                 })
                 data[i] = crazyAttrValue;
 
-            } else {
+            } else if (attr.startsWith('[') || attr.endsWith(')')){
 
                 // js->html one way binding
+                console.log(attr);
+
                 if (attr.startsWith('[')) {
                     let crazyAttrValue = this;
-                    elem.getAttribute(attr).split('.').forEach(x => {
-                        crazyAttrValue = crazyAttrValue[x];
+                    console.log("1",crazyAttrValue);
+                    elem.getAttribute(attr).split('.').forEach(x => {  
+                        crazyAttrValue = crazyAttrValue[x];  //binding to pikachu variable
+                        console.log(2,crazyAttrValue);
+
                     })
-                    elem[attr.slice(1)] = crazyAttrValue
+                    console.log(elem);
+                    console.log(attr.slice(1));
+
+                    elem[attr.slice(1)] = crazyAttrValue //why this, why not value
                 }
 
                 // html->js one way binding
@@ -58,9 +66,13 @@ traverse = () => {
                     for (let objIndex = 0; objIndex < objectScope.length; objIndex++) {
                         if (objIndex === objectScope.length - 1) {
                             crazyAttrValue[objectScope[objIndex]] = elem[attr.slice(0, attr.length - 1)];
+                            console.log(3,crazyAttrValue);
+
                             // setValue(crazyAttrValue[objectScope[objIndex]], elem[attr.slice(0, attr.length - 1)])
                         } else {
                             crazyAttrValue = crazyAttrValue[objectScope[objIndex]];
+                    console.log(4,crazyAttrValue);
+
                         }
                     }
                 }
@@ -72,3 +84,54 @@ traverse = () => {
     })
 }
 // }, 0)
+
+traverseOnLoad = () => {
+    getAllElementsWithAttribute('crazy-').forEach((elem, i) => {
+        let allAttrs = elem.getAttributeNames();
+        allAttrs.forEach(attr => {
+        if (attr=='for'){
+                //html for directive
+                let crazyAttrValue = this;
+                let iterator,opertor, iterable;
+                iterator=elem.getAttribute(attr).split(' ')[0];
+                operator=elem.getAttribute(attr).split(' ')[1];
+                iterable=elem.getAttribute(attr).split(' ')[2];
+                // console.log(iterable);
+                iterable.split('.').forEach(x => {  
+                    crazyAttrValue = crazyAttrValue[x];  //binding to pikachu variable
+                })
+                iterable=crazyAttrValue;
+                console.log("iterable",iterable);
+                let innerContent;
+                innerContent=elem.innerHTML;
+                console.log("For innerHTML=",innerContent);
+                parent=elem.parentNode;
+                parent.removeChild(elem);
+                elem.removeAttribute('crazy-');
+                elem.removeAttribute('for'); 
+                for (let idx in iterable) {
+                    let cln = elem.cloneNode(true);
+                    cln.innerHTML=cln.innerHTML.trim();
+                    startIdx=cln.innerHTML.indexOf('{');
+                    endIdx=cln.innerHTML.indexOf('}');
+                    if (startIdx>=0 && endIdx>=0 && startIdx<endIdx) {
+                        if (cln.innerHTML.substring(startIdx+1, endIdx)==iterator) {
+                            let a=Array.from(cln.innerHTML)
+                            a.splice(startIdx,endIdx-startIdx+1,iterable[idx]);
+                            cln.innerHTML=a.join('');
+                        }
+                        
+                    }
+                    parent.appendChild(cln);
+                    console.log("idx",idx, cln);
+                }
+               
+            }
+
+
+        })
+    })
+}
+
+
+document.addEventListener("DOMContentLoaded", traverseOnLoad);

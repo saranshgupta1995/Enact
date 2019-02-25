@@ -1,4 +1,5 @@
 var pikachu="pika";
+var arr=["chocolate","banana","peanuts","caramel","blueberry","baking soda","milk"];
 
 function raichu() {
     render = function () {
