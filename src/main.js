@@ -91,40 +91,52 @@ traverseOnLoad = () => {
         allAttrs.forEach(attr => {
         if (attr=='for'){
                 //html for directive
-                let crazyAttrValue = this;
-                let iterator,opertor, iterable;
-                iterator=elem.getAttribute(attr).split(' ')[0];
-                operator=elem.getAttribute(attr).split(' ')[1];
-                iterable=elem.getAttribute(attr).split(' ')[2];
-                // console.log(iterable);
-                iterable.split('.').forEach(x => {  
-                    crazyAttrValue = crazyAttrValue[x];  //binding to pikachu variable
-                })
-                iterable=crazyAttrValue;
-                console.log("iterable",iterable);
-                let innerContent;
-                innerContent=elem.innerHTML;
-                console.log("For innerHTML=",innerContent);
-                parent=elem.parentNode;
-                parent.removeChild(elem);
-                elem.removeAttribute('crazy-');
-                elem.removeAttribute('for'); 
-                for (let idx in iterable) {
-                    let cln = elem.cloneNode(true);
-                    cln.innerHTML=cln.innerHTML.trim();
-                    startIdx=cln.innerHTML.indexOf('{');
-                    endIdx=cln.innerHTML.indexOf('}');
-                    if (startIdx>=0 && endIdx>=0 && startIdx<endIdx) {
-                        if (cln.innerHTML.substring(startIdx+1, endIdx)==iterator) {
-                            let a=Array.from(cln.innerHTML)
-                            a.splice(startIdx,endIdx-startIdx+1,iterable[idx]);
-                            cln.innerHTML=a.join('');
-                        }
-                        
+                try {
+
+                    let crazyAttrValue = this;
+                    let iterator,operator, iterable;
+                    iterator=elem.getAttribute(attr).split(' ')[0];
+                    operator=elem.getAttribute(attr).split(' ')[1];
+                    iterable=elem.getAttribute(attr).split(' ')[2];
+                    
+                    if (operator!='of') {
+                        throw new OperatorError("Operator not supported in crazy- For");
                     }
-                    parent.appendChild(cln);
-                    console.log("idx",idx, cln);
+                    iterable.split('.').forEach(x => {  
+                        crazyAttrValue = crazyAttrValue[x];  //binding to pikachu variable
+                    })
+                    iterable=crazyAttrValue;
+                    console.log("iterable",iterable);
+                    let innerContent;
+                    innerContent=elem.innerHTML;
+                    console.log("For innerHTML=",innerContent);
+                    parent=elem.parentNode;
+                    parent.removeChild(elem);
+                    elem.removeAttribute('crazy-');
+                    elem.removeAttribute('for'); 
+                    for (let idx in iterable) {
+                        let cln = elem.cloneNode(true);
+                        cln.innerHTML=cln.innerHTML.trim();
+                        startIdx=cln.innerHTML.indexOf('{');
+                        endIdx=cln.innerHTML.indexOf('}');
+                        if (startIdx>=0 && endIdx>=0 && startIdx<endIdx) {
+                            if (cln.innerHTML.substring(startIdx+1, endIdx)==iterator) {
+                                let a=Array.from(cln.innerHTML)
+                                a.splice(startIdx,endIdx-startIdx+1,iterable[idx]);
+                                cln.innerHTML=a.join('');
+                            }
+                            
+                        }
+                        parent.appendChild(cln);
+                        console.log("idx",idx, cln);
+                    }
+
                 }
+                catch(err) {
+                    console.log(err.message); 
+                    console.log(err.stack);
+                }
+            
                
             }
 
@@ -132,6 +144,13 @@ traverseOnLoad = () => {
         })
     })
 }
+
+class OperatorError extends Error {
+    constructor(message) {
+      super(message); 
+      this.name = "OperatorError"; 
+    }
+  }
 
 
 document.addEventListener("DOMContentLoaded", traverseOnLoad);
