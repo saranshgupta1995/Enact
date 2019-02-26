@@ -23,7 +23,7 @@ Element.prototype.insertChildAtIndex = function (child, index) {
 
 
 // setInterval(() => {
-traverse = () => {
+let traverse = () => {
     getAllElementsWithAttribute('crazy-').forEach((elem, i) => {
         let allAttrs = elem.getAttributeNames();
         allAttrs.forEach(attr => {
@@ -85,7 +85,7 @@ traverse = () => {
 }
 // }, 0)
 
-traverseOnLoad = () => {
+let traverseOnLoad = () => {
     getAllElementsWithAttribute('crazy-').forEach((elem, i) => {
         let allAttrs = elem.getAttributeNames();
         allAttrs.forEach(attr => {
@@ -95,9 +95,9 @@ traverseOnLoad = () => {
 
                     let crazyAttrValue = this;
                     let iterator,operator, iterable;
-                    iterator=elem.getAttribute(attr).split(' ')[0];
-                    operator=elem.getAttribute(attr).split(' ')[1];
-                    iterable=elem.getAttribute(attr).split(' ')[2];
+                    //array destructuring
+                    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+                    [iterator, operator, iterable] = [...elem.getAttribute(attr).split(' ')];
                     
                     if (operator!='of') {
                         throw new OperatorError("Operator not supported in crazy- For");
@@ -107,8 +107,7 @@ traverseOnLoad = () => {
                     })
                     iterable=crazyAttrValue;
                     console.log("iterable",iterable);
-                    let innerContent;
-                    innerContent=elem.innerHTML;
+                    let innerContent=elem.innerHTML;
                     console.log("For innerHTML=",innerContent);
                     parent=elem.parentNode;
                     parent.removeChild(elem);
@@ -154,3 +153,8 @@ class OperatorError extends Error {
 
 
 document.addEventListener("DOMContentLoaded", traverseOnLoad);
+
+export default{
+    traverse,
+    getAllElementsWithAttribute
+}

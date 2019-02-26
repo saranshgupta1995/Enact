@@ -1,3 +1,8 @@
+import {
+    traverse,
+    getAllElementsWithAttribute
+} from "./main";
+
 function setValue(attr, val){
 
     let targetDOMElement = getAllElementsWithAttribute('en-render-on')[0];  //where to render the saved input
@@ -37,3 +42,7 @@ function setValue(attr, val){
     traverse();
 
 }
+
+export default {
+    setValue
+};

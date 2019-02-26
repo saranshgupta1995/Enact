@@ -1,3 +1,5 @@
+import { setValue } from "./../src/setter";
+
 var pikachu="pika";
 var arr=["chocolate","banana","peanuts","caramel","blueberry","baking soda","milk"];
 
@@ -7,9 +9,12 @@ function raichu() {
     }
 
     return pikachu && "Hi " + pikachu;
-
 }
 
-setPika=function(e){
+var setPika=function(e){
     setValue('pikachu',e.target.value)
 }
+
+window.setPika=setPika;
+
+console.log(setValue)
